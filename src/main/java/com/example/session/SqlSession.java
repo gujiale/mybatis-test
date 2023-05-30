@@ -43,4 +43,6 @@ public interface SqlSession {
 
     <T> T selectAll();
 
+    Configuration getConfiguration();
+
 }

@@ -1,13 +1,14 @@
 package com.example.session.defaults;
 
-import com.example.binding.MapperRegistry;
+import com.example.mapping.MappedStatement;
+import com.example.session.Configuration;
 import com.example.session.SqlSession;
 
 public class DefaultSession implements SqlSession {
 
-    private final MapperRegistry mapperRegistry;
-    public DefaultSession(MapperRegistry mapperRegistry) {
-        this.mapperRegistry = mapperRegistry;
+    private final Configuration config;
+    public DefaultSession(Configuration config) {
+        this.config = config;
     }
 
     @Override
@@ -18,16 +19,23 @@ public class DefaultSession implements SqlSession {
 
     @Override
     public <T> T selectOne(String statement, Object parameter) {
-        return (T) ("你执行了selectOne，SQL："+statement + "入参"+parameter.toString());
+        System.out.println(statement);
+        MappedStatement mappedStatement = config.getMappedStatement(statement);
+        return (T) ("你的操作被代理了！" + "\n方法：" + statement + "\n入参：" + parameter + "\n待执行SQL：" + mappedStatement.getSql());
     }
 
     @Override
     public <T> T getMapper(Class<T> type) {
-        return this.mapperRegistry.getMapper(type, this);
+        return this.config.getMapper(type, this);
     }
 
     @Override
     public <T> T selectAll() {
         return (T) ("你执行了selectAll");
+    }
+
+    @Override
+    public Configuration getConfiguration() {
+        return config;
     }
 }

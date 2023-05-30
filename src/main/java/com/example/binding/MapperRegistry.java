@@ -1,6 +1,7 @@
 package com.example.binding;
 
 import cn.hutool.core.lang.ClassScanner;
+import com.example.session.Configuration;
 import com.example.session.SqlSession;
 
 import java.util.HashMap;
@@ -9,7 +10,13 @@ import java.util.Set;
 
 /*映射器注册机，负责管理所有的映射器，映射器管理所有的映射关系*/
 public class MapperRegistry {
+    private Configuration config;
+
     private final Map<Class<?>, MapperProxyFactory<?>> knownMappers = new HashMap<>();
+
+    public MapperRegistry(Configuration config) {
+        this.config = config;
+    }
 
 
     //只有请求addMapper的时候才会去注册，实际上是动态加载的
