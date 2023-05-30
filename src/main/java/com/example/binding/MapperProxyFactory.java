@@ -1,7 +1,8 @@
-package com.example;
+package com.example.binding;
+
+import com.example.session.SqlSession;
 
 import java.lang.reflect.Proxy;
-import java.util.Map;
 
 public class MapperProxyFactory<T> {
     Object object;
@@ -13,8 +14,8 @@ public class MapperProxyFactory<T> {
         this.mapperInterface = mapperInterface;
     }
 
-    public T newInstance(Map<String, String> sqlSession) {
-        final GuMapperProxy<T> guMapperProxy = new GuMapperProxy<>(sqlSession, mapperInterface);
+    public T newInstance(SqlSession sqlSession) {
+        final MapperProxy<T> guMapperProxy = new MapperProxy<>(sqlSession, mapperInterface);
         return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[]{mapperInterface}, guMapperProxy);
     }
 }
